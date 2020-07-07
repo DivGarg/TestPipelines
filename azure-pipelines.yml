@@ -1,35 +1,48 @@
 trigger:
     - master
-jobs:
-  - job: MyFirstJob
-    timeoutInMinutes: 2
-    displayName: "Build Code"   
-    
-    pool:
-      vmImage: 'ubuntu-latest'
+stages:
+  - stage: Stage1    
+    jobs:
+      - job: MyFirstJob
+        timeoutInMinutes: 2
+        displayName: "Build Code"   
+        
+        pool:
+          vmImage: 'ubuntu-latest'
 
-    variables:
-      buildConfiguration: 'Release'
+        variables:
+          buildConfiguration: 'Release'
 
-    steps:
-    - script: dotnet build --configuration $(buildConfiguration)
-      displayName: 'dotnet build $(buildConfiguration)'
-    - bash: echo "Build Step Completed" 
-    - task: Bash@3
-      displayName: MyBashScripts
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Write your commands here
-          
-          echo 'Hello world'
-  - job: Second_Job
-    displayName: "Deploy Database"
-    timeoutInMinutes: 5
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - bash: echo "Deploying Database" 
+        steps:
+        - script: dotnet build --configuration $(buildConfiguration)
+          displayName: 'dotnet build $(buildConfiguration)'
+        - bash: echo "Build Step Completed" 
+        - task: Bash@3
+          displayName: MyBashScripts
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your commands here
+              
+              echo 'Hello world'
+      - job: Second_Job
+        displayName: "Deploy Database"
+        timeoutInMinutes: 5
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - bash: echo "Deploying Database" 
+ 
+  - stage: "Stage_2"
+    jobs:
+      - job: "Stage_2_First_Job" 
+        displayName: "S2FJ"
+        timeoutInMinutes: 5
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - bash: echo "Stage 2 Done" 
+
 
 
 
